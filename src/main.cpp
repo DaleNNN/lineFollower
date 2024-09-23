@@ -91,6 +91,7 @@ void loop() {
             rightSpeed = 255;
         }
         motorsForward();
+        delay(50);
 
     } else {
         //If on/off switch is set to off position
@@ -124,17 +125,22 @@ void serialLog() {
     Serial.println();
 
     if (readingML > threshold && readingMR > threshold) {
-        Serial.println("      |  |");
+        Serial.println(readingML);
     } else {
-        Serial.println("       |ØØ|");
+        Serial.println(readingML);
+        Serial.println(readingMR);
+        Serial.println(readingL);
+        Serial.println(readingR);
     }
+
+    delay(100);
 }
 
 
 void motorsForward() {
     //The function actually driving the motors based on speed previously set
 
-    Serial.println("Driving Motor forward with speed:" + String(leftSpeed) + " and  " + String(rightSpeed));
+    //Serial.println("Driving Motor forward with speed:" + String(leftSpeed) + " and  " + String(rightSpeed));
 
     digitalWrite(motorLPos, HIGH);
     digitalWrite(motorLNeg, LOW);
