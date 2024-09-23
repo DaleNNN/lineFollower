@@ -1,14 +1,10 @@
 #include <Arduino.h>
 #include <QTRSensors.h>
 
-//Sensor declaration left, right, midleft, midright
-constexpr int sensorL = A2;
-constexpr int sensorR = A3;
-constexpr int sensorML = A0;
-constexpr int sensorMR = A1;
-
-
-constexpr int switchPin = 3; //Pin for on/off switch
+//Creating object qtr
+QTRSensors qtr;
+constexpr uint8_t SensorCount = 4;
+uint16_t sensorValues[SensorCount];
 
 
 constexpr int motorLEnable = 10; //Enabler and speed for left motor
@@ -24,12 +20,20 @@ int rightSpeed = 0;
 
 int threshold = 800; //Threshold for reflectance
 int readingL = 0;
-int readingR = 0; //Declaring readings variables for all sensors
+int readingR = 0; //Declaring reading variables for all sensors
 int readingML = 0;
 int readingMR = 0;
 
 
 void setup() {
+
+    // configuring the sensors
+    qtr.setTypeRC();
+    qtr.setSensorPins((const uint8_t[]){A0, A1, A2, A3}, SensorCount);
+    qtr.setEmitterPin(3);
+
+    Serial.begin(9600);
+
     pinMode(motorLEnable, OUTPUT);
     pinMode(motorLPos, OUTPUT);
     pinMode(motorLNeg, OUTPUT);
@@ -37,7 +41,7 @@ void setup() {
     pinMode(motorRPos, OUTPUT);
     pinMode(motorRNeg, OUTPUT);
 
-    Serial.begin(9600);
+
 }
 
 //Declaration of functions to be implemented later
@@ -46,18 +50,28 @@ void motorsForward();
 void serialLog();
 
 void loop() {
+
+    //read sensor readings
+    qtr.read(sensorValues);
     threshold = 800;
 
-    //Sensor readings
-    readingL = analogRead(sensorL);
-    readingR = analogRead(sensorR);
-    readingML = analogRead(sensorML);
-    readingMR = analogRead(sensorMR);
+    readingL = sensorValues[2];
+    readingR = sensorValues[3];
+    readingML = sensorValues[0];
+    readingMR = sensorValues[1];
+
+
+    // print the sensor values as numbers from 0 to 2500, where 0 means maximum
+    // reflectance and 2500 means minimum reflectance
+    /*for (uint8_t i = 0; i < SensorCount; i++)
+    {
+        Serial.print(sensorValues[i]);
+        Serial.print('\t');
+    }
+    Serial.println();*/
 
     serialLog();
 
-    if (digitalRead(switchPin) == HIGH) {
-        //If on/off switch is set to on
 
         if ((readingL > threshold) && (readingR > threshold)
             && (readingML > threshold) && (readingMR > threshold)) {
@@ -96,30 +110,27 @@ void loop() {
         motorsForward();
         delay(50);
 
-    } else {
-        //If on/off switch is set to off position
-        stopMotors();
     }
-}
+
 
 void serialLog() {
     //Log the line position in terminal based off sensor readings
-    if (readingL > threshold) {
+    if (readingL < threshold) {
         Serial.print("|  |");
     } else {
         Serial.print("|II|");
     }
-    if (readingML > threshold) {
+    if (readingML < threshold) {
         Serial.print("|  |");
     } else {
         Serial.print("|II|");
     }
-    if (readingMR > threshold) {
+    if (readingMR < threshold) {
         Serial.print("|  |");
     } else {
         Serial.print("|II|");
     }
-    if (readingR > threshold) {
+    if (readingR < threshold) {
         Serial.print("|  |");
     } else {
         Serial.print("|II|");
@@ -127,14 +138,14 @@ void serialLog() {
 
     Serial.println();
 
-    if (readingML > threshold && readingMR > threshold) {
+    /*if (readingML > threshold && readingMR > threshold) {
         Serial.println(readingML);
     } else {
         Serial.println(readingML);
         Serial.println(readingMR);
         Serial.println(readingL);
         Serial.println(readingR);
-    }
+    }*/
 
     delay(100);
 }
