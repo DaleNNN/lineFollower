@@ -1,10 +1,12 @@
 #include <Arduino.h>
+#include <QTRSensors.h>
 
 //Sensor declaration left, right, midleft, midright
 constexpr int sensorL = A2;
 constexpr int sensorR = A3;
 constexpr int sensorML = A0;
 constexpr int sensorMR = A1;
+
 
 constexpr int switchPin = 3; //Pin for on/off switch
 
