@@ -108,7 +108,6 @@ void loop() {
             rightSpeed = 255;
         }
         motorsForward();
-        delay(50);
 
     }
 
