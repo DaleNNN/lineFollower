@@ -16,7 +16,7 @@ constexpr int motorLPos = 8;
 constexpr int motorLNeg = 12; //Motors left and right pos and neg-pins
 constexpr int motorRPos = 13;
 constexpr int motorRNeg = 9;
-constexpr int motorREnable = 8; //Enabler and speed for right motor
+constexpr int motorREnable = 11; //Enabler and speed for right motor
 
 //Speed to be used later
 int leftSpeed = 0;
@@ -36,6 +36,8 @@ void setup() {
     pinMode(motorREnable, OUTPUT);
     pinMode(motorRPos, OUTPUT);
     pinMode(motorRNeg, OUTPUT);
+
+    Serial.begin(9600);
 }
 
 //Declaration of functions to be implemented later
@@ -45,7 +47,6 @@ void serialLog();
 
 void loop() {
     threshold = 800;
-    Serial.begin(9600);
 
     //Sensor readings
     readingL = analogRead(sensorL);
