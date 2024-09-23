@@ -1,11 +1,12 @@
 #include <Arduino.h>
 
-constexpr int sensorL = A2; //Sensors left, right,
-constexpr int sensorR = A3; //mid-left and mid-right
+//Sensor declaration left, right, midleft, midright
+constexpr int sensorL = A2;
+constexpr int sensorR = A3;
 constexpr int sensorML = A0;
 constexpr int sensorMR = A1;
 
-constexpr int switchPin = 3;
+constexpr int switchPin = 3; //Pin for on/off switch
 
 
 constexpr int motorLEnable = 10; //Enabler and speed for left motor
@@ -15,12 +16,13 @@ constexpr int motorRPos = 13;
 constexpr int motorRNeg = 9;
 constexpr int motorREnable = 8; //Enabler and speed for right motor
 
-int leftSpeed = 0; //Speed to be used later
+//Speed to be used later
+int leftSpeed = 0;
 int rightSpeed = 0;
 
 int threshold = 800; //Threshold for reflectance
 int readingL = 0;
-int readingR = 0; //Readings for all sensors
+int readingR = 0; //Declaring readings variables for all sensors
 int readingML = 0;
 int readingMR = 0;
 
@@ -34,9 +36,10 @@ void setup() {
     pinMode(motorRNeg, OUTPUT);
 }
 
+//Declaration of functions to be implemented later
 void stopMotors();
-void motorsForward();       //declaring functions
-void serialLog();           //implementation later
+void motorsForward();
+void serialLog();
 
 void loop() {
     threshold = 800;
@@ -57,90 +60,77 @@ void loop() {
             && (readingML > threshold) && (readingMR > threshold)) {
             //If no line is detected
             stopMotors();
+
         } else if ((readingL > threshold) && (readingML > threshold)
                    && (readingR < threshold)) {
             //If right detects line
             leftSpeed = 255;
             rightSpeed = 100;
+
         } else if ((readingL < threshold) && (readingMR > threshold)
                    && (readingR > threshold)) {
             //If left detects line
             leftSpeed = 100;
             rightSpeed = 255;
+
         } else if ((readingL > threshold) && (readingML < threshold)
                    && (readingMR > threshold) && (readingR > threshold)) {
             //If only midleft detects line
             leftSpeed = 175;
             rightSpeed = 255;
+
         } else if ((readingL > threshold) && (readingML > threshold)
                    && (readingMR < threshold) && (readingR > threshold)) {
             //If only midright detects line
             leftSpeed = 255;
             rightSpeed = 175;
+
         } else {
             //If none of the above, go forward
             leftSpeed = 255;
             rightSpeed = 255;
         }
         motorsForward();
-    }
-    else {
+
+    } else {
         //If on/off switch is set to off position
         stopMotors();
     }
-
 }
 
 void serialLog() {
     //Log the line position in terminal based off sensor readings
-    if(readingL>threshold)
-    {
+    if (readingL > threshold) {
         Serial.print("|  |");
-
-    }
-    else
-    {
+    } else {
         Serial.print("|II|");
     }
-    if(readingML>threshold)
-    {
+    if (readingML > threshold) {
         Serial.print("|  |");
-    }
-    else
-    {
+    } else {
         Serial.print("|II|");
     }
-    if(readingMR>threshold)
-    {
+    if (readingMR > threshold) {
         Serial.print("|  |");
-
-    }
-    else
-    {
+    } else {
         Serial.print("|II|");
     }
-    if(readingR>threshold)
-    {
-
+    if (readingR > threshold) {
         Serial.print("|  |");
-    }
-
-    else
-    {
+    } else {
         Serial.print("|II|");
     }
 
     Serial.println();
 
-    if(readingML>threshold && readingMR>threshold)
-    {
+    if (readingML > threshold && readingMR > threshold) {
         Serial.println("      |  |");
-    }
-    else
-    {
+    } else {
         Serial.println("       |ØØ|");
     }
 }
+
+
 void motorsForward() {
     //The function actually driving the motors based on speed previously set
 
@@ -152,10 +142,8 @@ void motorsForward() {
     digitalWrite(motorRNeg, LOW);
 
     // Set motor speed (0 to 255)
-
     analogWrite(motorLEnable, leftSpeed);
     analogWrite(motorREnable, rightSpeed);
-
 }
 
 void stopMotors() {
