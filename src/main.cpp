@@ -137,23 +137,12 @@ void serialLog() {
 
     Serial.println();
 
-    /*if (readingML > threshold && readingMR > threshold) {
-        Serial.println(readingML);
-    } else {
-        Serial.println(readingML);
-        Serial.println(readingMR);
-        Serial.println(readingL);
-        Serial.println(readingR);
-    }*/
-
-    delay(100);
+    delay(100); // Want to get rid of
 }
 
 
 void motorsForward() {
-    //The function actually driving the motors based on speed previously set
-
-    //Serial.println("Driving Motor forward with speed:" + String(leftSpeed) + " and  " + String(rightSpeed));
+    //Driving the motors with previously determined speed
 
     digitalWrite(motorLPos, HIGH);
     digitalWrite(motorLNeg, LOW);
