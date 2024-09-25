@@ -26,7 +26,6 @@ int readingMR = 0;
 
 
 void setup() {
-
     // configuring the sensors
     qtr.setTypeRC();
     qtr.setSensorPins((const uint8_t[]){A0, A1, A2, A3}, SensorCount);
@@ -40,8 +39,6 @@ void setup() {
     pinMode(motorREnable, OUTPUT);
     pinMode(motorRPos, OUTPUT);
     pinMode(motorRNeg, OUTPUT);
-
-
 }
 
 //Declaration of functions to be implemented later
@@ -50,7 +47,6 @@ void motorsForward();
 void serialLog();
 
 void loop() {
-
     //read sensor readings
     qtr.read(sensorValues);
     threshold = 800;
@@ -61,6 +57,7 @@ void loop() {
     readingMR = sensorValues[1];
 
 
+    // *FOR DEBUG*
     // print the sensor values as numbers from 0 to 2500, where 0 means maximum
     // reflectance and 2500 means minimum reflectance
     /*for (uint8_t i = 0; i < SensorCount; i++)
@@ -70,46 +67,49 @@ void loop() {
     }
     Serial.println();*/
 
+
     serialLog();
 
 
-        if ((readingL > threshold) && (readingR > threshold)
-            && (readingML > threshold) && (readingMR > threshold)) {
-            //If no line is detected
-            stopMotors();
-
-        } else if ((readingL > threshold) && (readingML > threshold)
-                   && (readingR < threshold)) {
-            //If right detects line
-            leftSpeed = 255;
-            rightSpeed = 100;
-
-        } else if ((readingL < threshold) && (readingMR > threshold)
-                   && (readingR > threshold)) {
-            //If left detects line
-            leftSpeed = 100;
-            rightSpeed = 255;
-
-        } else if ((readingL > threshold) && (readingML < threshold)
-                   && (readingMR > threshold) && (readingR > threshold)) {
-            //If only midleft detects line
-            leftSpeed = 175;
-            rightSpeed = 255;
-
-        } else if ((readingL > threshold) && (readingML > threshold)
-                   && (readingMR < threshold) && (readingR > threshold)) {
-            //If only midright detects line
-            leftSpeed = 255;
-            rightSpeed = 175;
-
-        } else {
-            //If none of the above, go forward
-            leftSpeed = 255;
-            rightSpeed = 255;
-        }
-        motorsForward();
-
+    if ((readingL > threshold) && (readingR > threshold)
+        && (readingML > threshold) && (readingMR > threshold)) {
+        //If no line is detected
+        stopMotors();
+    } else if ((readingL > threshold) && (readingML > threshold)
+               && (readingMR < threshold) && (readingR < threshold)) {
+        //If right and midright detects line
+        leftSpeed = 255;
+        rightSpeed = 100;
+    } else if ((readingL < threshold) && (readingML < threshold)
+               && (readingMR > threshold) && (readingR > threshold)) {
+        //If left and midleft detects line
+        leftSpeed = 100;
+        rightSpeed = 255;
+    } else if ((readingL > threshold) && (readingML < threshold)
+               && (readingMR > threshold) && (readingR > threshold)) {
+        //If only midleft detects line
+        leftSpeed = 175;
+        rightSpeed = 255;
+    } else if ((readingL > threshold) && (readingML > threshold)
+               && (readingMR < threshold) && (readingR > threshold)) {
+        //If only midright detects line
+        leftSpeed = 255;
+        rightSpeed = 175;
+    } else if ((readingL < threshold) && (readingML > threshold)) {
+        //If only left detects line
+        leftSpeed = 50;
+        rightSpeed = 255;
+    } else if ((readingR < threshold) && readingMR > threshold) {
+        //If only right detects line
+        leftSpeed = 255;
+        rightSpeed = 50;
+    } else {
+        //If none of the above, go forward
+        leftSpeed = 255;
+        rightSpeed = 255;
     }
+    motorsForward();
+}
 
 
 void serialLog() {
