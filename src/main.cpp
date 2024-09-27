@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include <QTRSensors.h>
-#include "calibrate.cpp"
 
 //Creating object sensors
 QTRSensors sensors;
@@ -103,13 +102,13 @@ void loop() {
     } else if ((readingL > threshold) && (readingML < threshold)
             && (readingMR < threshold) && (readingR < threshold)) {
         //If only left detects line
-        leftSpeed = 10;
+        leftSpeed = 0;
         rightSpeed = 255;
     } else if ((readingR > threshold) && (readingL < threshold)
             && (readingMR < threshold) && (readingML < threshold)) {
         //If only right detects line
         leftSpeed = 255;
-        rightSpeed = 10;
+        rightSpeed = 0;
     } else {
         //If none of the above, go forward
         leftSpeed = 255;

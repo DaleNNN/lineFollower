@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include <QTRSensors.h>
-#include "main.cpp"
 
 void runCalibrate() {
     pinMode(LED_BUILTIN, OUTPUT);
