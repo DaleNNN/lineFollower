@@ -7,12 +7,12 @@ constexpr uint8_t SensorCount = 4;
 uint16_t sensorValues[SensorCount];
 
 
-constexpr int motorLEnable = 10; //Enabler and speed for left motor
+constexpr int motorLEnable = 10; //Enabler and speed(PWM) for left motor
 constexpr int motorLPos = 8;
 constexpr int motorLNeg = 12; //Motors left and right pos and neg-pins
 constexpr int motorRPos = 13;
 constexpr int motorRNeg = 9;
-constexpr int motorREnable = 11; //Enabler and speed for right motor
+constexpr int motorREnable = 11; //Enabler and speed(PWM) for right motor
 
 //Speed to be used later
 int leftSpeed = 0;
@@ -81,8 +81,11 @@ void serialLog();
 void loop() {
     //read sensor readings
     sensors.read(sensorValues);
-    threshold = 800;
+    //Set threshold to value from calibration earlier.
+    threshold = sensors.readLineBlack(sensorValues);
+    Serial.println("Sensors have been calibrated to value of " + threshold);
 
+    //Save each reading in own variable
     readingL = sensorValues[2];
     readingR = sensorValues[3];
     readingML = sensorValues[0];
@@ -169,7 +172,8 @@ void serialLog() {
 
     Serial.println();
 
-    delay(100); // Want to get rid of
+    delay(100);  //Necessary to not destroy console with spam of insanity.
+                    //Leave serialLog function only for debugs
 }
 
 
