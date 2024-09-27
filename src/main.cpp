@@ -80,25 +80,25 @@ void loop() {
         //If no line is detected
         stopMotors();
     } else if ((readingL < threshold) && (readingML < threshold)
-               && (readingMR < threshold) && (readingR > threshold)) {
+               && (readingMR > threshold) && (readingR > threshold)) {
         //If right and midright detects line
         leftSpeed = 255;
-        rightSpeed = 80;
+        rightSpeed = 120;
     } else if ((readingL > threshold) && (readingML > threshold)
                && (readingMR < threshold) && (readingR < threshold)) {
         //If left and midleft detects line
-        leftSpeed = 80;
+        leftSpeed = 120;
         rightSpeed = 255;
     } else if ((readingL < threshold) && (readingML > threshold)
                && (readingMR < threshold) && (readingR < threshold)) {
         //If only midleft detects line
-        leftSpeed = 160;
+        leftSpeed = 180;
         rightSpeed = 255;
     } else if ((readingL < threshold) && (readingML < threshold)
                && (readingMR > threshold) && (readingR < threshold)) {
         //If only midright detects line
         leftSpeed = 255;
-        rightSpeed = 160;
+        rightSpeed = 180;
     } else if ((readingL > threshold) && (readingML < threshold)
             && (readingMR < threshold) && (readingR < threshold)) {
         //If only left detects line
@@ -111,8 +111,8 @@ void loop() {
         rightSpeed = 0;
     } else {
         //If none of the above, go forward
-        leftSpeed = 255;
-        rightSpeed = 255;
+        leftSpeed = 200;
+        rightSpeed = 200;
     }
     motorsForward();
 }
@@ -157,8 +157,8 @@ void motorsForward() {
     digitalWrite(motorRNeg, LOW);
 
     // Set motor speed (0 to 255)
-    analogWrite(motorLEnable, leftSpeed);
-    analogWrite(motorREnable, rightSpeed);
+    analogWrite(motorLEnable, leftSpeed *0.8);
+    analogWrite(motorREnable, rightSpeed *0.8);
 }
 
 void stopMotors() {
