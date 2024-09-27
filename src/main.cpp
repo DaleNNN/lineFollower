@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include <QTRSensors.h>
 
-//Creating object qtr
-QTRSensors qtr;
+//Creating object sensors
+QTRSensors sensors;
 constexpr uint8_t SensorCount = 4;
 uint16_t sensorValues[SensorCount];
 
@@ -27,9 +27,9 @@ int readingMR = 0;
 
 void setup() {
     // configuring the sensors
-    qtr.setTypeRC();
-    qtr.setSensorPins((const uint8_t[]){A0, A1, A2, A3}, SensorCount);
-    qtr.setEmitterPin(3);
+    sensors.setTypeRC();
+    sensors.setSensorPins((const uint8_t[]){A0, A1, A2, A3}, SensorCount);
+    sensors.setEmitterPin(3);
 
     Serial.begin(9600);
 
@@ -48,7 +48,7 @@ void serialLog();
 
 void loop() {
     //read sensor readings
-    qtr.read(sensorValues);
+    sensors.read(sensorValues);
     threshold = 800;
 
     readingL = sensorValues[2];
