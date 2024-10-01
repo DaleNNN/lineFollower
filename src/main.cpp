@@ -71,14 +71,14 @@ void loop() {
     }
     Serial.println();
 
-
     //serialLog();
+    //*End of debug*
 
 
     if ((readingL < threshold) && (readingR < threshold)
         && (readingML < threshold) && (readingMR < threshold)) {
         //If no line is detected
-        //stopMotors();
+
     } else if ((readingL < threshold) && (readingML < threshold)
                && (readingMR > threshold) && (readingR > threshold)) {
         //If right and midright detects line
@@ -92,13 +92,13 @@ void loop() {
     } else if ((readingL < threshold) && (readingML > threshold)
                && (readingMR < threshold) && (readingR < threshold)) {
         //If only midleft detects line
-        leftSpeed = 200;
+        leftSpeed = 225;
         rightSpeed = 255;
     } else if ((readingL < threshold) && (readingML < threshold)
                && (readingMR > threshold) && (readingR < threshold)) {
         //If only midright detects line
         leftSpeed = 255;
-        rightSpeed = 200;
+        rightSpeed = 225;
     } else if ((readingL > threshold) && (readingML < threshold)
             && (readingMR < threshold) && (readingR < threshold)) {
         //If only left detects line
