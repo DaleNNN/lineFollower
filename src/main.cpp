@@ -64,12 +64,12 @@ void loop() {
     // *FOR DEBUG*
     // print the sensor values as numbers from 0 to 2500, where 0 means maximum
     // reflectance and 2500 means minimum reflectance
-    for (uint8_t i = 3; i < SensorCount; i++)
+    /*for (uint8_t i = 3; i < SensorCount; i++)
     {
         Serial.print(String(readingL) + " " + String(readingML) + " " + String(readingMR) + " " + String(readingR));
         Serial.print('\t');
     }
-    Serial.println();
+    Serial.println();*/
 
     //serialLog();
     //*End of debug*
@@ -83,22 +83,22 @@ void loop() {
                && (readingMR > threshold) && (readingR > threshold)) {
         //If right and midright detects line
         leftSpeed = 255;
-        rightSpeed = 140;
+        rightSpeed = 120;
     } else if ((readingL > threshold) && (readingML > threshold)
                && (readingMR < threshold) && (readingR < threshold)) {
         //If left and midleft detects line
-        leftSpeed = 140;
+        leftSpeed = 120;
         rightSpeed = 255;
     } else if ((readingL < threshold) && (readingML > threshold)
                && (readingMR < threshold) && (readingR < threshold)) {
         //If only midleft detects line
-        leftSpeed = 225;
+        leftSpeed = 200;
         rightSpeed = 255;
     } else if ((readingL < threshold) && (readingML < threshold)
                && (readingMR > threshold) && (readingR < threshold)) {
         //If only midright detects line
         leftSpeed = 255;
-        rightSpeed = 225;
+        rightSpeed = 200;
     } else if ((readingL > threshold) && (readingML < threshold)
             && (readingMR < threshold) && (readingR < threshold)) {
         //If only left detects line
